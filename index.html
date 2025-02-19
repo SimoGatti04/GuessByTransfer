@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8">
+    <title>Guess by Transfer</title>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <header>
+      <h1>Guess the Player</h1>
+    </header>
+    <main>
+      <div id="gameContainer">
+        <div id="transfersContainer"></div>
+        <div id="nationalTransfersContainer" style="margin-top: 1rem;"></div>
+        <div id="feedback"></div>
+        <input type="text" id="playerSearchInput" placeholder="Cerca il giocatore...">
+        <div id="playerList"></div>
+        <button id="nextRoundButton" style="display:none;">Prossimo Round</button>
+      </div>
+    </main>
+    <script type="module" src="js/game.mjs"></script>
+  </body>
+</html>
