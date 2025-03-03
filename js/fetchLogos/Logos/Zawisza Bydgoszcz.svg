@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X6 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="163.317mm" height="201.032mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 16367 20146"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .fil2 {fill:#2B2A29}
+    .fil0 {fill:#0066A8}
+    .fil1 {fill:#1F1A17}
+   ]]>
+  </style>
+ </defs>
+ <g id="Layer">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <path class="fil0" d="M12772 11306l2517 2355c694,-1343 959,-2945 1043,-5220 79,-2161 0,-4901 0,-8441 -5077,0 -10154,0 -15231,0l3161 3097 8845 0 0 5344c0,976 0,1921 -334,2865z"/>
+  <path class="fil1" d="M3221 4136l-3221 -3161c0,2488 0,5048 0,7465 0,5564 3408,9925 8166,11706 3090,-1495 5109,-3233 6282,-5104 -765,-758 -1531,-1515 -2296,-2273 -820,1393 -2233,2849 -3986,3542 -1775,-658 -4944,-2906 -4944,-7871l0 -4304z"/>
+  <polygon class="fil2" points="10320,11447 5979,11444 7506,6756 5979,6756 5979,5695 10328,5695 8800,10383 10319,10383 "/>
+ </g>
+</svg>

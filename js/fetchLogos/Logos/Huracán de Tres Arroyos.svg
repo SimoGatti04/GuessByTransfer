@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   width="396"
+   height="628"
+   version="1.0"
+   sodipodi:docname="Club_Atletico_Huracán.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs5" />
+  <sodipodi:namedview
+     inkscape:window-height="990"
+     inkscape:window-width="1321"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     guidetolerance="10.0"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     showgrid="false"
+     inkscape:zoom="1.0382166"
+     inkscape:cx="310.90947"
+     inkscape:cy="292.77962"
+     inkscape:window-x="349"
+     inkscape:window-y="31"
+     inkscape:current-layer="svg2" />
+  <path
+     style="opacity:1;fill:#e71821;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     d="M 90.40625 549.03125 L 104.34375 612.1875 C 164.06198 632.17441 230.11562 633.60639 292.5625 612.1875 L 306.9375 549.5 C 247.42193 569.09949 135.79517 566.83517 90.40625 549.03125 z M 126.1875 565.46875 C 133.89687 565.46873 140.15625 574.70705 140.15625 586.09375 C 140.15624 597.48045 133.89687 606.71875 126.1875 606.71875 C 118.47813 606.71877 112.21875 597.48045 112.21875 586.09375 C 112.21875 574.70705 118.47813 565.46875 126.1875 565.46875 z M 270.1875 565.46875 C 277.89687 565.46875 284.15625 574.70705 284.15625 586.09375 C 284.15625 597.48045 277.89687 606.71877 270.1875 606.71875 C 262.47813 606.71875 256.21874 597.48045 256.21875 586.09375 C 256.21875 574.70705 262.47812 565.46873 270.1875 565.46875 z M 198.25 570.09375 C 209.14946 570.09375 218.00001 580.40911 218 593.125 C 218 605.8409 209.14946 616.18748 198.25 616.1875 C 187.35054 616.1875 178.5 605.8409 178.5 593.125 C 178.5 580.4091 187.35054 570.09378 198.25 570.09375 z "
+     id="path3210" />
+  <path
+     id="path2386"
+     style="fill:none;fill-opacity:0.39215686;stroke:#e71821;stroke-width:6.01476002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
+     d="M 393.94477,190.23006 C 393.94477,293.90785 306.34841,378.05215 198.41717,378.05215 C 90.485936,378.05215 2.8895706,293.90785 2.8895706,190.23006 C 2.8895706,86.552269 90.485936,2.4079755 198.41717,2.4079755 C 306.34841,2.4079755 393.94477,86.552269 393.94477,190.23006 zM 155.07362,7.7055208 L 6.2607362,222.49693M 241.29754,7.7055208 L 390.11042,222.49693M 180.11656,4.3343552 L 141.10736,117.5092 L 68.386503,220.57055M 9.6319019,136.29141 L 67.904908,221.05215 L 188.78528,560.57669M 68.868098,132.43865 L 131.47546,228.75767 L 228.75767,560.57669M 64.052147,326.52147 L 150.25767,559.1319M 386.75767,136.29141 L 328.48466,221.05215 L 207.60429,560.57669M 327.52147,132.43865 L 264.91411,228.75767 L 167.6319,560.57669M 332.33742,326.52147 L 246.1319,559.1319M 216.3865,4.3343552 L 255.3957,117.5092 L 328.11656,220.57055M 93.911043,31.30368 C 153.40042,69.386423 246.80601,68.340696 301.96012,31.30368M 282.21472,460.40491 L 113.65644,460.40491 L 94.392638,532.64417M 154.11043,460.40491 L 135.80982,522.53067M 243.20552,460.40491 L 270.65644,556.72393M 282.21472,459.44172 L 301.96012,531.68098M 312.07361,540.59048 C 312.07361,552.42038 261.15553,562.02146 198.41717,562.02146 C 135.67882,562.02146 84.760737,552.42038 84.760737,540.59048 C 84.760737,528.76058 135.67882,519.1595 198.41717,519.1595 C 261.15553,519.1595 312.07361,528.76058 312.07361,540.59048 z" />
+  <rect
+     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="rect3233"
+     width="138.69939"
+     height="104.50614"
+     x="128.58589"
+     y="125.21473" />
+  <g
+     id="g3228"
+     style="fill:#e71821;fill-opacity:1">
+    <rect
+       y="130.27147"
+       x="137.01381"
+       height="95.115028"
+       width="41.17638"
+       id="rect3222"
+       style="opacity:1;fill:#e71821;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <rect
+       style="opacity:1;fill:#e71821;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3224"
+       width="41.17638"
+       height="95.115028"
+       x="218.29141"
+       y="130.27147" />
+    <rect
+       y="164.94632"
+       x="177.46779"
+       height="19.263803"
+       width="40.935581"
+       id="rect3226"
+       style="opacity:1;fill:#e71821;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  </g>
+</svg>
