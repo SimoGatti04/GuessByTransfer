@@ -26,34 +26,23 @@ main {
   padding: 1rem;
   margin: 0 auto;
   box-sizing: border-box;
-  /* Facoltativo, se vuoi nascondere qualitativamente eventuale overflow in eccesso: */
-  overflow: hidden;
   position: relative;
 }
 
-/* Modifica dei container dei trasferimenti per non espandersi oltre il gameContainer */
 #transfersContainer,
 #nationalTransfersContainer {
-  /* Usare width 100% assicura che non superino il gameContainer */
   width: 100%;
   box-sizing: border-box;
-
-  /* Flex per disporre gli item in fila */
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;  /* Partono da sinistra */
+  justify-content: flex-start;
   align-items: center;
-
-  /* Abilita lo scroll orizzontale */
   overflow-x: auto;
   scroll-behavior: smooth;
-
-  /* Rimuovi padding laterale e usa eventualmente un padding interno verticale */
   padding: 0.5rem 0;
-
-  /* Importante: in un container flex assicura che i figli possano restringersi */
   min-width: 0;
 }
+
 
 /* Se necessario, aggiungi uno spazio tra gli elementi */
 .transfer-item {
@@ -99,4 +88,33 @@ button {
 #feedback {
   margin-bottom: 1rem;
   font-weight: bold;
+}
+
+/* Altri stili già presenti... */
+
+#suggestionPanel {
+  display: none; /* nascosto di default */
+  position: absolute;
+  top: calc(100% + 5px);  /* posizionato subito sotto l'input; regola se necessario */
+  left: 0;
+  width: 100%;
+  max-height: 200px; /* Altezza massima, abilitando lo scroll se necessario */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  box-sizing: border-box;
+  padding: 0.5rem 0;
+}
+
+/* Stile per ogni suggerimento */
+.player-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.player-item:hover {
+  background-color: #f2f2f2;
 }

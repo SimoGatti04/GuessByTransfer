@@ -16,5 +16,5 @@ export function normalizeString(str) {
  */
 export function searchPlayers(players, query) {
   const normalizedQuery = normalizeString(query);
-  return players.filter(player => normalizeString(player.name).includes(normalizedQuery));
+  return players.filter(player => normalizeString(player.title).includes(normalizedQuery));
 }

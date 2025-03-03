@@ -1,48 +1,15 @@
-import { fetchTeamLogoFromWikipedia } from "./logoswiki.mjs";
 import { searchPlayers, normalizeString } from "./playerSearch.mjs";
 
-let players = [];
 let detailedData = [];
 let selectedPlayer = null;  // Giocatore scelto per il round
+let attempts = 0; // contatore tentativi per il giocatore
 
-function formatTeamName(name, imageSearch=false) {
-  let formatted = name;
-  // Rimuove "men's national association football team" ovunque (case insensitive)
-  formatted = formatted.replace(/men's national association football team/gi, '');
-  // Sostituisce "national under-XX association football team" con "under-XX"
-  if (imageSearch) {
-    if (name.toLowerCase().includes("czech republic")) {
-      formatted = "Czechia"
-    }
-    formatted = formatted.replace(/national under-([0-9]+) football team/gi, '');
-    formatted = formatted.replace(/national under-([0-9]+) association football team/gi, '');
-    formatted = formatted.replace(/national under-23 soccer team/gi, '');
-  } else {
-    formatted = formatted.replace(/national under-([0-9]+) association football team/gi, 'under-$1');
-    formatted = formatted.replace(/national under-([0-9]+) football team/gi, 'under-$1');
-    formatted = formatted.replace(/national under-23 soccer team/gi, 'under-$1');
-  }
-  // Rimuove eventuale residuo "national association football team"
-  formatted = formatted.replace(/national association football team/gi, '');
-
-  // Rimuove "men's national football team"
-  formatted = formatted.replace(/men's national football team/gi, '');
-
-  formatted = formatted.replace(/men's national soccer team/gi, ' ');
-
-  return formatted.trim();
-}
-
-
-// Carica players.json e detailed_players.json
+// Carica i dati dal detailed_players.json
 function loadData() {
-  Promise.all([
-    fetch("js/players.json").then(response => response.json()),
-    fetch("js/detailed_players.json").then(response => response.json())
-  ])
-    .then(([playersData, detailedPlayersData]) => {
-      players = playersData;
-      detailedData = detailedPlayersData;
+  fetch("js/fetchPlayers/detailed_players.json")
+    .then(response => response.json())
+    .then(data => {
+      detailedData = data;
       startRound();
     })
     .catch(err => console.error("Errore nel caricamento dei dati:", err));
@@ -50,164 +17,81 @@ function loadData() {
 
 // Avvia un nuovo round selezionando un giocatore casuale e mostrando i trasferimenti
 function startRound() {
-  // Resetta feedback e la ricerca
   const feedbackElem = document.getElementById("feedback");
   const searchInput = document.getElementById("playerSearchInput");
   const clubContainer = document.getElementById("transfersContainer");
   const nationalContainer = document.getElementById("nationalTransfersContainer");
+  const hintElem = document.getElementById("playerNameHint");
 
-  if (!feedbackElem || !searchInput || !clubContainer || !nationalContainer) {
+  if (!feedbackElem || !searchInput || !clubContainer || !nationalContainer || !hintElem) {
     console.error("Errore: uno o più elementi non sono presenti nel DOM");
     return;
   }
 
   feedbackElem.textContent = "";
   searchInput.value = "";
+  // Svuota il contenitore dei suggerimenti
   document.getElementById("playerList").innerHTML = "";
+  // Nascondi il pannello dei suggerimenti
+  const suggestionPanel = document.getElementById("suggestionPanel");
+  if (suggestionPanel) {
+    suggestionPanel.style.display = "none";
+  }
+
   clubContainer.innerHTML = "";
   nationalContainer.innerHTML = "";
+  hintElem.textContent = "";
   document.getElementById("nextRoundButton").style.display = "none";
 
-  // Seleziona un giocatore casuale
-  selectedPlayer = players[Math.floor(Math.random() * players.length)];
-  console.log("Giocatore scelto:", selectedPlayer.name);
+  attempts = 0;
+  selectedPlayer = detailedData[Math.floor(Math.random() * detailedData.length)];
+  console.log("Giocatore scelto:", selectedPlayer.title);
 
-  // Recupera tutte le membership in detailed_players.json con lo stesso qid
-  const memberships = detailedData.filter(item => item.qid === selectedPlayer.qid);
-  if (memberships.length === 0) {
-    console.error("Nessuna membership trovata per il giocatore:", selectedPlayer);
-    clubContainer.innerHTML =
-      "<p>Nessun dato disponibile per questo giocatore.</p>";
-    nationalContainer.innerHTML = "";
-    return;
-  }
-  memberships.sort((a, b) => new Date(a.start) - new Date(b.start));
-
-  // Modifica dei filtri: controlla sia m.team che m.teamName per la parola "national" o "nazionale"
-  const clubMemberships = memberships.filter(m => {
-    const teamField = m.team || "";
-    const teamNameField = m.teamName || "";
-    return !( /national/i.test(teamField) || /national?/i.test(teamNameField) );
+  // Filtra eventuali record totali
+  const clubMemberships = (selectedPlayer.clubs || []).filter(m => {
+    return !(m.team.trim() === "" && m.startYear.trim().toLowerCase() === "total");
   });
-  const nationalMemberships = memberships.filter(m => {
-    const teamField = m.team || "";
-    const teamNameField = m.teamName || "";
-    return /national/i.test(teamField) || /national?/i.test(teamNameField);
+  const nationalMemberships = (selectedPlayer.internationals || []).filter(m => {
+    return !(m.team.trim() === "" && m.startYear.trim().toLowerCase() === "total");
   });
 
-  // Renderizza le membership in due box distinti
   renderTransfers(clubMemberships, clubContainer);
   renderTransfers(nationalMemberships, nationalContainer);
 
   feedbackElem.textContent = "Cerca il giocatore da indovinare...";
 }
 
-// Renderizza le membership all'interno del container fornito.
-// Se il container è per le nazionali, esegue un controllo ulteriore per gli under.
+// Renderizza le membership (club o nazionali) nel container fornito
 function renderTransfers(memberships, container) {
   container.innerHTML = "";
-
   memberships.forEach((m, index) => {
+    if (m.team.trim() === "" && m.startYear.trim().toLowerCase() === "total") return;
     const teamDiv = document.createElement("div");
     teamDiv.className = "transfer-item";
-
-    // Crea l'elemento per il nome del team, formattato correttamente
     const teamNameDiv = document.createElement("div");
-    const rawName = m.teamName || m.team.split("/").pop();
-    teamNameDiv.textContent = formatTeamName(rawName);
+    teamNameDiv.textContent = m.team;
     teamDiv.appendChild(teamNameDiv);
-
-    // Aggiunge un'immagine con placeholder di default
     const logo = document.createElement("img");
-    logo.alt = formatTeamName(rawName);
-    logo.src = "default_logo.png";
+    logo.alt = m.team;
+    const extensions = [".png", ".svg", ".jpeg", ".jpg"];
+    let currentExt = 0;
+    const setLogoSrc = () => {
+      logo.src = `js/fetchLogos/Logos/${m.team}${extensions[currentExt]}`;
+    };
+    logo.onerror = () => {
+      currentExt++;
+      if (currentExt < extensions.length) {
+        setLogoSrc();
+      } else {
+        console.error(`Nessun logo trovato per ${m.team} con estensioni ${extensions.join(", ")}`);
+      }
+    };
+    setLogoSrc();
     teamDiv.appendChild(logo);
-
-    // Se il container è destinato alle nazionali e il nome contiene un pattern "under-"
-    if (
-      container.id === "nationalTransfersContainer" &&
-      m.teamName &&
-      /under-\s*\d+/i.test(m.teamName)
-    ) {
-      // Estrae il nome della nazione maggiore, per esempio "Italy" da "Italy under-21"
-      const majorNation = formatTeamName(m.teamName, true);
-      // Cerca nella global detailedData (che contiene tutte le membership)
-      // una membership di tipo "national" che contenga il majorNation nel teamName
-      const majorNationalMembership = detailedData.find(item =>
-        item.membershipType === "national" &&
-        item.teamName &&
-        item.teamName.toLowerCase().includes(majorNation.toLowerCase())
-      );
-      if (majorNationalMembership) {
-        // Usa il team della nazionale maggiore per richiedere il logo
-        fetchTeamLogoFromWikipedia(majorNationalMembership.team)
-          .then(url => {
-            logo.src = url;
-          })
-          .catch(err => {
-            console.error("Errore recuperando il logo della nazionale maggiore:", err);
-          });
-      } else {
-        // Se non si trova corrispondenza, usa comunque il team corrente (under) come fallback
-        fetchTeamLogoFromWikipedia(m.team)
-          .then(url => {
-            logo.src = url;
-          })
-          .catch(err => {
-            console.error("Errore recuperando il logo della nazionale under:", err);
-          });
-      }
-    } else {
-      // Ramo per i club (o per nazionali con nome non under)
-      // Se il nome del team contiene una lettera "B" o "C" isolata (anche con punto),
-      // proviamo a cercare in detailed_players il team corrispondente senza quella lettera.
-      const clubPattern = /^(.*)\s([BC])\.?$/;
-      const match = rawName.match(clubPattern);
-      if (match) {
-        const baseName = match[1].trim();
-        // Cerca un record in detailed_players con teamName che, formattato, corrisponde al baseName.
-        const baseRecord = detailed_players.find(item =>
-          item.teamName &&
-          formatTeamName(item.teamName).toLowerCase() === baseName.toLowerCase()
-        );
-        if (baseRecord) {
-          console.log(`Match per team "${rawName}": usando il team base "${baseName}" per il logo.`);
-          fetchTeamLogoFromWikipedia(baseRecord.team)
-            .then(url => {
-              logo.src = url;
-            })
-            .catch(err => {
-              console.error("Errore recuperando il logo dal record base:", err);
-            });
-        } else {
-          // Nessun record trovato: usa il team corrente come fallback
-          fetchTeamLogoFromWikipedia(m.team)
-            .then(url => {
-              logo.src = url;
-            })
-            .catch(err => {
-              console.error("Errore recuperando il logo:", err);
-            });
-        }
-      } else {
-        // Nessun pattern "B" o "C" isolato nel nome, usa il team corrente
-        fetchTeamLogoFromWikipedia(m.team)
-          .then(url => {
-            logo.src = url;
-          })
-          .catch(err => {
-            console.error("Errore recuperando il logo:", err);
-          });
-      }
-    }
-
     const yearLabel = document.createElement("div");
-    yearLabel.textContent = new Date(m.start).getFullYear();
+    yearLabel.textContent = m.startYear || (m.start ? new Date(m.start).getFullYear() : "");
     teamDiv.appendChild(yearLabel);
-
     container.appendChild(teamDiv);
-
-    // Se non è l'ultimo elemento, aggiunge una freccia
     if (index < memberships.length - 1) {
       const arrow = document.createElement("span");
       arrow.className = "transfer-arrow";
@@ -217,39 +101,94 @@ function renderTransfers(memberships, container) {
   });
 }
 
-
-// Aggiorna la lista dei suggerimenti in base all'input di ricerca
+// Mostra i suggerimenti nel riquadro a tendina sotto l'input
 function updatePlayerList(filteredPlayers) {
   const suggestionContainer = document.getElementById("playerList");
+  const suggestionPanel = document.getElementById("suggestionPanel");
   suggestionContainer.innerHTML = "";
+
+  if(filteredPlayers.length === 0) {
+    suggestionPanel.style.display = "none";
+    return;
+  }
+
   filteredPlayers.forEach(player => {
     const playerItem = document.createElement("div");
     playerItem.className = "player-item";
-    playerItem.textContent = player.name;
-    // Al click, inserisce il nome nell'input e verifica la risposta
+    playerItem.textContent = player.title;
     playerItem.addEventListener("click", () => {
-      document.getElementById("playerSearchInput").value = player.name;
+      document.getElementById("playerSearchInput").value = player.title;
       checkAnswer(player);
+      suggestionPanel.style.display = "none";
     });
     suggestionContainer.appendChild(playerItem);
   });
+  suggestionPanel.style.display = "block";
 }
 
-// Verifica se il giocatore selezionato corrisponde a quello da indovinare
-function checkAnswer(selectedCandidate) {
-  const feedback = document.getElementById("feedback");
-  if (selectedCandidate.qid === selectedPlayer.qid) {
-    feedback.textContent = "Corretto! Bravo!";
-    document.getElementById("nextRoundButton").style.display = "block";
-  } else {
-    feedback.textContent = "Sbagliato! Riprova.";
+// Aggiorna l'indizio (hint) in base ai tentativi falliti
+function updateHint() {
+  const hintElem = document.getElementById("playerNameHint");
+  const nameParts = selectedPlayer.title.split(" ");
+  if (attempts === 1) {
+    hintElem.textContent = nameParts[0].charAt(0) + " ...";
+  } else if (attempts === 2) {
+    if (nameParts.length > 1) {
+      hintElem.textContent = nameParts[0].charAt(0) + " " + nameParts[1].charAt(0) + " ...";
+    } else {
+      hintElem.textContent = selectedPlayer.title;
+    }
+  } else if (attempts >= 3) {
+    hintElem.textContent = selectedPlayer.title;
   }
 }
 
-// Tutto il codice che accede al DOM verrà eseguito dopo il caricamento completo
+// Verifica se il giocatore selezionato è corretto
+function checkAnswer(selectedCandidate) {
+  const feedback = document.getElementById("feedback");
+  if (selectedCandidate.pageid === selectedPlayer.pageid) {
+    feedback.textContent = "Corretto! Bravo!";
+    document.getElementById("playerNameHint").textContent = selectedPlayer.title;
+    document.getElementById("nextRoundButton").style.display = "block";
+  } else {
+    attempts++;
+    updateHint();
+    if (attempts < 3) {
+      feedback.textContent = "Sbagliato! Riprova.";
+    } else {
+      feedback.textContent = "Nessun tentativo rimasto. La risposta era: " + selectedPlayer.title;
+      document.getElementById("nextRoundButton").style.display = "block";
+    }
+  }
+}
+
+// Listener per skip e surrender
+function skipAttempt() {
+  attempts++;
+  updateHint();
+  const feedback = document.getElementById("feedback");
+  if (attempts < 3) {
+    feedback.textContent = "Skip! Riprova.";
+  } else {
+    feedback.textContent = "Nessun tentativo rimasto. La risposta era: " + selectedPlayer.title;
+    document.getElementById("nextRoundButton").style.display = "block";
+  }
+}
+
+function surrender() {
+  attempts = 3;
+  updateHint();
+  const feedback = document.getElementById("feedback");
+  feedback.textContent = "Hai rinunciato. La risposta era: " + selectedPlayer.title;
+  document.getElementById("nextRoundButton").style.display = "block";
+}
+
+// Imposta i listener al DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("playerSearchInput");
   const nextRoundButton = document.getElementById("nextRoundButton");
+  const skipButton = document.getElementById("skipButton");
+  const surrenderButton = document.getElementById("surrenderButton");
 
   if (!searchInput) {
     console.error("Elemento #playerSearchInput non trovato nel DOM");
@@ -259,15 +198,25 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Elemento #nextRoundButton non trovato nel DOM");
     return;
   }
+  if (!skipButton) {
+    console.error("Elemento #skipButton non trovato nel DOM");
+    return;
+  }
+  if (!surrenderButton) {
+    console.error("Elemento #surrenderButton non trovato nel DOM");
+    return;
+  }
 
-  // Listener per la ricerca
+  // Listener per l'input di ricerca: aggiorna il riquadro a tendina con i suggerimenti
   searchInput.addEventListener("input", (event) => {
     const query = event.target.value;
-    const filteredPlayers = searchPlayers(players, query);
+    const filteredPlayers = searchPlayers(detailedData, query);
     updatePlayerList(filteredPlayers);
   });
 
   nextRoundButton.addEventListener("click", startRound);
+  skipButton.addEventListener("click", skipAttempt);
+  surrenderButton.addEventListener("click", surrender);
 
   loadData();
 });

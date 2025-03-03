@@ -8,6 +8,9 @@
   },
   "private": true,
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "axios": "^1.8.1",
+    "cheerio": "^1.0.0",
+    "node-fetch": "^3.3.2",
+    "playwright": "^1.50.1"
   }
 }

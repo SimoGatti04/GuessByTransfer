@@ -2,7 +2,7 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8">
-    <title>Guess by Transfer</title>
+    <title>Guess the Player</title>
     <link rel="stylesheet" href="css/styles.css">
   </head>
   <body>
@@ -10,13 +10,18 @@
       <h1>Guess the Player</h1>
     </header>
     <main>
-      <div id="gameContainer">
+      <div id="gameContainer" style="position: relative;">
         <div id="transfersContainer"></div>
         <div id="nationalTransfersContainer" style="margin-top: 1rem;"></div>
         <div id="feedback"></div>
         <input type="text" id="playerSearchInput" placeholder="Cerca il giocatore...">
-        <div id="playerList"></div>
+        <div id="suggestionPanel">
+          <div id="playerList"></div>
+        </div>
+        <button id="skipButton">Skip</button>
+        <button id="surrenderButton">Surrender</button>
         <button id="nextRoundButton" style="display:none;">Prossimo Round</button>
+        <div id="playerNameHint"></div>
       </div>
     </main>
     <script type="module" src="js/game.mjs"></script>
